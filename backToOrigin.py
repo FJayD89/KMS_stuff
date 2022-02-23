@@ -13,8 +13,8 @@ def winCheck(pos):
 	# print('Not at origin')
 	return False
 
-def move(mPos, turn, angle):
-	newPos = [mPos[0] + depth*cos(angle), mPos[0] + depth*sin(angle)]
+def move(mPos, turn, angle, step):
+	newPos = [mPos[0] + step*cos(angle), mPos[1] + step*sin(angle)]
 	newAngle = angle + turn*pi/4
 	# print(newPos)
 	return [newPos, newAngle]
@@ -25,7 +25,7 @@ def recurse(pos, angle):
 	# oldPos, oldAngle = pos, angle
 	if not depth == maxDepth and not done:
 		for turn in [-1,1]:
-			newState = move(pos, turn, angle)
+			newState = move(pos, turn, angle, depth)
 			turns.append(turn)
 			recurse(newState[0], newState[1])
 			turns.pop()
@@ -36,11 +36,12 @@ def recurse(pos, angle):
 		done = True
 		print(turns)
 
-# while not done:
-# 	recurse([0,0], 0)
-# 	print('not at depth', maxDepth)
-# 	maxDepth += 1
-# print(maxDepth)
+while not done:
+	recurse([0,0], 0)
+	print('not at depth', maxDepth)
+	maxDepth += 1
+print(maxDepth)
+
 
 def endstate(turnSequence):
 	global depth
@@ -49,12 +50,17 @@ def endstate(turnSequence):
 	for turn in turnSequence:
 		depth += 1
 		print(pos, ',', angle/pi)
-		newState = move(pos, turn, angle)
+		newState = move(pos, turn, angle, depth)
 		pos, angle = newState[0], newState[1]
 
 	print(pos, ',', angle/pi)
 
 
-mTurnSequence = [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, 1]
+# mTurnSequence = [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, 1]
 
-endstate([1,1,1])
+# endstate([1,1,1])
+
+# state = [[0,0], 0]
+# for i in range(10):
+# 	print(state)
+# 	state = move(state[0], -1, state[1], i+1)
